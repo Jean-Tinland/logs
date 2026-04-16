@@ -1,0 +1,20 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="256" height="256" rx="40" fill="#222222"
+        style="fill:#222222;fill:color(display-p3 0.1333 0.1333 0.1333);fill-opacity:1;" />
+    <rect x="37" y="37" width="182" height="182" rx="9" fill="black"
+        style="fill:black;fill-opacity:1;" />
+    <rect x="37.5" y="37.5" width="181" height="181" rx="8.5" stroke="white" stroke-opacity="0.45"
+        style="stroke:white;stroke-opacity:0.45;" />
+    <rect x="51.56" y="84.32" width="97.0667" height="9.70667" rx="4.85333" fill="#E5E5E5"
+        style="fill:#E5E5E5;fill:color(display-p3 0.8980 0.8980 0.8980);fill-opacity:1;" />
+    <rect x="52" y="150" width="78.8667" height="9.70667" rx="4.85333" fill="#E5E5E5"
+        style="fill:#E5E5E5;fill:color(display-p3 0.8980 0.8980 0.8980);fill-opacity:1;" />
+    <rect x="52" y="172" width="153" height="30" rx="8" fill="#575656"
+        style="fill:#575656;fill:color(display-p3 0.3413 0.3364 0.3364);fill-opacity:1;" />
+    <rect x="52" y="62" width="42.4667" height="9.70667" rx="4.85333" fill="#E5E5E5"
+        style="fill:#E5E5E5;fill:color(display-p3 0.8980 0.8980 0.8980);fill-opacity:1;" />
+    <rect x="51.56" y="106.16" width="64.3067" height="9.70667" rx="4.85333" fill="#FFD484"
+        style="fill:#FFD484;fill:color(display-p3 1.0000 0.8302 0.5167);fill-opacity:1;" />
+    <rect x="51.56" y="128" width="97.0667" height="9.70667" rx="4.85333" fill="#E5E5E5"
+        style="fill:#E5E5E5;fill:color(display-p3 0.8980 0.8980 0.8980);fill-opacity:1;" />
+</svg>

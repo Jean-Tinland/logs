@@ -1,0 +1,187 @@
+.journal {
+  flex: 1 1 100%;
+  position: relative;
+  width: min(calc(100% - 20px), 900px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+@media (min-width: 680px) {
+  .journal {
+    gap: 3px;
+  }
+}
+
+.journal::before,
+.journal::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--ds-grey-300, #d7d7d7) 30%,
+    var(--ds-grey-300, #d7d7d7) 70%,
+    transparent 100%
+  );
+}
+
+@media (prefers-color-scheme: dark) {
+  .journal::before,
+  .journal::after {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      var(--ds-grey-200, #f8f8f8) 30%,
+      var(--ds-grey-200, #f8f8f8) 70%,
+      transparent 100%
+    );
+  }
+}
+
+.journal::before {
+  left: 0;
+}
+
+.journal::after {
+  right: 0;
+}
+
+button.loadMore {
+  margin: 0 auto;
+}
+
+.separator {
+  flex: 0 0 20px;
+}
+
+.log {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 2px 6px;
+  font-size: 14px;
+  border-radius: var(--ds-radius-100, 4px);
+  transition: background-color 160ms
+    var(--ds-transition-easing, cubic-bezier(0.4, 0.1, 0.2, 0.9));
+}
+
+.log:hover {
+  background-color: var(--ds-grey-200, #ededed);
+}
+
+.log.selected {
+  background-color: var(--ds-grey-200, #ededed);
+  box-shadow: inset 0 0 0 1px var(--ds-grey-400, #9d9d9d);
+}
+
+.logMain {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+@media (min-width: 680px) {
+  .logMain {
+    flex-direction: row;
+    gap: 1ch;
+  }
+}
+
+.log:is(.highlight, .warn, .danger)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.log.highlight::before {
+  background-color: var(--ds-blue-300, #6688ff);
+}
+
+.log.warn::before {
+  background-color: var(--ds-yellow-300, #ffb648);
+}
+
+.log.danger::before {
+  background-color: var(--ds-red-500, #ee3535);
+}
+
+.createdAt {
+  flex: 0 0 auto;
+}
+
+.content {
+  min-width: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.actions {
+  flex: 0 0 auto;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms
+    var(--ds-transition-easing, cubic-bezier(0.4, 0.1, 0.2, 0.9));
+}
+
+.log:hover .actions,
+.actionsVisible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+button.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20px;
+  padding: 0 7px;
+  font-size: 11px;
+  line-height: 1;
+  border: 1px solid var(--ds-grey-300, #d7d7d7);
+  border-radius: var(--ds-radius-100, 4px);
+  background-color: var(--ds-grey-000, #fff);
+  color: var(--layout-foreground-color);
+}
+
+button.action:hover {
+  background-color: var(--ds-grey-100, #f8f8f8);
+}
+
+button.action u {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+button.action.deleteAction {
+  border-color: var(--ds-red-300, #f26464);
+  color: var(--ds-red-500, #990700);
+}
+
+.empty {
+  text-align: center;
+  font-size: 14px;
+  color: var(--ds-grey-500, #7c7b7b);
+}

@@ -1,0 +1,35 @@
+{
+  "name": "logs",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "next dev --webpack -p 4015",
+    "build": "next build --webpack",
+    "start": "next start -p 4015",
+    "lint": "next lint",
+    "update": "pm2 stop logs && git checkout package-lock.json && git pull && npm run launch",
+    "launch": "npm install && npm run build && pm2 startOrRestart ecosystem.config.js -- -p $PORT",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@next/env": "^16.2.4",
+    "classnames": "^2.5.1",
+    "jsonwebtoken": "^9.0.3",
+    "jt-design-system": "https://packages.jeantinland.com/jt-design-system/2.0.2",
+    "next": "^16.2.4",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^22.19.17",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.4",
+    "typescript": "^5.9.3"
+  }
+}

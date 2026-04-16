@@ -1,0 +1,7 @@
+.main {
+  flex: 1 1 100%;
+  width: 100%;
+  min-height: 100vh;
+  color: var(--layout-foreground-color);
+  background-color: var(--layout-background-color);
+}
