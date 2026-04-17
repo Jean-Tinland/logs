@@ -7,10 +7,7 @@ import Button from "jt-design-system/es/button";
 import { useSnackbar } from "jt-design-system/es/snackbar";
 import { useAppContext } from "@/components/app-context";
 import * as API from "@/services/api";
-import * as Cookies from "@/services/cookies";
 import styles from "./login-form.module.css";
-
-const TOKEN_COOKIE_DAYS = 90;
 
 export default function LoginForm() {
   const router = useRouter();
@@ -26,13 +23,11 @@ export default function LoginForm() {
 
     try {
       setLoading(true);
-      const { token } = await API.login(password);
-      Cookies.set("token", token, TOKEN_COOKIE_DAYS);
+      await API.login(password);
       snackbar.show({ type: "success", message: "Logged in successfully" });
       router.push("/");
     } catch {
       snackbar.show({ type: "error", message: "Login error", filler: false });
-      Cookies.remove("token");
     } finally {
       setLoading(false);
     }

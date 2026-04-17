@@ -1,5 +1,9 @@
 # Changelog
 
+## Fri, Apr 17 2026 (v1.2.0)
+
+- feat: full security overhaul
+
 ## Fri, Apr 17 2026 (v1.1.1)
 
 - feat: enhance helper text visibility in input field

@@ -4,10 +4,43 @@ import type {
   LogKind,
   SearchLogsPayload,
 } from "@/types/log";
+import * as Cookies from "@/services/cookies";
+
+function getAuthHeaders(): Record<string, string> {
+  if (typeof document === "undefined") {
+    return {};
+  }
+
+  const token = Cookies.get("token");
+  if (!token) {
+    return {};
+  }
+
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+}
+
+async function extractErrorMessage(response: Response, fallback: string) {
+  try {
+    const payload = (await response.json()) as { error?: unknown };
+    if (typeof payload?.error === "string" && payload.error.trim()) {
+      return payload.error;
+    }
+  } catch {
+    // Ignore malformed payloads and keep fallback.
+  }
+
+  return fallback;
+}
 
 export async function getLogs(date?: string): Promise<LogItem[]> {
   const res = await fetch(
     `/api/logs?days=1${date ? `&reference=${date}` : ""}`,
+    {
+      headers: getAuthHeaders(),
+      cache: "no-store",
+    },
   );
   if (!res.ok) return [];
   const payload = (await res.json()) as GroupedLogsPayload;
@@ -15,7 +48,10 @@ export async function getLogs(date?: string): Promise<LogItem[]> {
 }
 
 export async function getLatestGroups(days: number): Promise<LogItem[][]> {
-  const res = await fetch(`/api/logs?days=${days}`);
+  const res = await fetch(`/api/logs?days=${days}`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
   if (!res.ok) return [];
   const payload = (await res.json()) as GroupedLogsPayload;
   return payload.groups.map((group) => group.items);
@@ -26,6 +62,7 @@ export async function getLogGroups(reference: string, days: number) {
     `/api/logs?days=${days}&reference=${encodeURIComponent(reference)}`,
     {
       cache: "no-store",
+      headers: getAuthHeaders(),
     },
   );
   if (!res.ok) return [];
@@ -36,18 +73,26 @@ export async function getLogGroups(reference: string, days: number) {
 export async function createLog(kind: LogKind, content: string) {
   const res = await fetch(`/api/logs`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeaders(),
+    },
     body: JSON.stringify({ kind, content }),
   });
-  if (!res.ok) throw new Error("Failed to create log");
+  if (!res.ok) {
+    throw new Error(await extractErrorMessage(res, "Failed to create log"));
+  }
   return res.json();
 }
 
 export async function deleteLog(date: string, id: number) {
   const res = await fetch(`/api/logs/${id}?date=${encodeURIComponent(date)}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
   });
-  if (!res.ok) throw new Error("Failed to delete log");
+  if (!res.ok) {
+    throw new Error(await extractErrorMessage(res, "Failed to delete log"));
+  }
   return res.json();
 }
 
@@ -88,10 +133,11 @@ export async function searchLogs({
   const res = await fetch(`/api/logs/search${suffix ? `?${suffix}` : ""}`, {
     cache: "no-store",
     signal,
+    headers: getAuthHeaders(),
   });
 
   if (!res.ok) {
-    throw new Error("Failed to search logs");
+    throw new Error(await extractErrorMessage(res, "Failed to search logs"));
   }
 
   return res.json();

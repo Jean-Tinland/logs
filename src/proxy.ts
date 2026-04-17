@@ -16,7 +16,9 @@ export async function proxy(request: NextRequest) {
     Auth.checkToken(token);
     return NextResponse.next();
   } catch {
-    return NextResponse.redirect(redirect);
+    const response = NextResponse.redirect(redirect);
+    response.cookies.delete("token");
+    return response;
   }
 }
 

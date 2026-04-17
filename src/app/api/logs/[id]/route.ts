@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isDateKey } from "@/lib/date";
 import { deleteLog } from "@/lib/logs-repository";
+import * as Auth from "@/services/auth";
 
 export const runtime = "nodejs";
 
@@ -21,23 +22,35 @@ function parseId(value: string) {
 }
 
 export async function DELETE(request: NextRequest, context: RouteContext) {
-  const { id: idParam } = await context.params;
-  const id = parseId(idParam);
+  try {
+    Auth.checkRequest(request);
 
-  const date = request.nextUrl.searchParams.get("date");
+    const { id: idParam } = await context.params;
+    const id = parseId(idParam);
+    const date = request.nextUrl.searchParams.get("date");
 
-  if (!id || !date || !isDateKey(date)) {
+    if (!id || !date || !isDateKey(date)) {
+      return NextResponse.json(
+        { error: "Missing or invalid log id/date" },
+        { status: 400 },
+      );
+    }
+
+    const deleted = await deleteLog(date, id);
+
+    if (!deleted) {
+      return NextResponse.json({ error: "Log not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    if (error instanceof Auth.AuthError) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     return NextResponse.json(
-      { error: "Missing or invalid log id/date" },
-      { status: 400 },
+      { error: "Could not delete log" },
+      { status: 500 },
     );
   }
-
-  const deleted = await deleteLog(date, id);
-
-  if (!deleted) {
-    return NextResponse.json({ error: "Log not found" }, { status: 404 });
-  }
-
-  return NextResponse.json({ ok: true });
 }
