@@ -2,9 +2,9 @@
 
 :root {
   --layout-foreground-color: var(--ds-grey-800);
-  --layout-background-color: var(--ds-grey-100);
+  --layout-background-color: var(--ds-grey-000);
 
-  --content-font:
+  --default-font:
     ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
@@ -107,16 +107,59 @@
   --ds-floating-z-index: 100;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
+:root[data-theme="dark"] {
+  --ds-grey-800: #fff;
+  --ds-grey-700: #f8f8f8;
+  --ds-grey-600: #ededed;
+  --ds-grey-500: #d7d7d7;
+  --ds-grey-400: #9d9d9d;
+  --ds-grey-300: #7c7b7b;
+  --ds-grey-200: #484848;
+  --ds-grey-100: #262626;
+  --ds-grey-000: #000;
+
+  --ds-blue-000: #002299;
+  --ds-blue-100: #002dcc;
+  --ds-blue-200: #0038ff;
+  --ds-blue-300: #6688ff;
+  --ds-blue-400: #ccd7ff;
+  --ds-blue-500: #d4e4fc;
+  --ds-blue-600: #e8f0fc;
+
+  --ds-green-100: #4ab292;
+  --ds-green-200: #24c678;
+  --ds-green-300: #4bde97;
+  --ds-green-400: #a6ffc3;
+  --ds-green-500: #e2ffec;
+
+  --ds-yellow-100: #e2a445;
+  --ds-yellow-200: #ffa114;
+  --ds-yellow-300: #ffb648;
+  --ds-yellow-400: #ffdead;
+  --ds-yellow-500: #fff3e0;
+
+  --ds-red-200: #660500;
+  --ds-red-300: #990700;
+  --ds-red-400: #ee3535;
+  --ds-red-500: #f26464;
+  --ds-red-600: #fde7e7;
+
+  --ds-tooltip-background: var(--ds-grey-200);
+  --ds-popover-background: var(--ds-grey-200);
+  --ds-dropdown-menu-background: var(--ds-grey-200);
+  --ds-dropdown-menu-item-hover-background: var(--ds-grey-100);
+}
+
+:root[data-theme="auto"] {
+  @media (prefers-color-scheme: dark) {
     --ds-grey-800: #fff;
-    --ds-grey-700: #ededed;
-    --ds-grey-600: #d7d7d7;
-    --ds-grey-500: #9d9d9d;
-    --ds-grey-400: #7c7b7b;
-    --ds-grey-300: #484848;
-    --ds-grey-200: #262626;
-    --ds-grey-100: #000;
+    --ds-grey-700: #f8f8f8;
+    --ds-grey-600: #ededed;
+    --ds-grey-500: #d7d7d7;
+    --ds-grey-400: #9d9d9d;
+    --ds-grey-300: #7c7b7b;
+    --ds-grey-200: #484848;
+    --ds-grey-100: #262626;
     --ds-grey-000: #000;
 
     --ds-blue-000: #002299;
@@ -147,6 +190,8 @@
 
     --ds-tooltip-background: var(--ds-grey-200);
     --ds-popover-background: var(--ds-grey-200);
+    --ds-dropdown-menu-background: var(--ds-grey-200);
+    --ds-dropdown-menu-item-hover-background: var(--ds-grey-100);
   }
 }
 
@@ -261,7 +306,6 @@ html,
 body {
   position: relative;
   vertical-align: baseline;
-  font-family: var(--content-font);
   font-size: 16px;
   line-height: 1.3;
   color: var(--layout-foreground-color);
@@ -270,6 +314,8 @@ body {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--ds-grey-300) transparent;
+  font-family: var(--content-font, var(--default-font));
 }
 
 body {
@@ -299,4 +345,26 @@ body {
 
 [data-logs] {
   height: 100%;
+}
+
+pre.shiki {
+  margin: 10px 0;
+  padding: 46px 15px 15px;
+  font-size: var(--label);
+  font-family: var(--content-font);
+  border-radius: var(--radius-200);
+  overflow: auto;
+  scrollbar-width: thin;
+}
+
+@media (prefers-color-scheme: dark) {
+  .shiki,
+  .shiki span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+  }
+}
+
+code {
+  font-family: var(--content-font);
 }

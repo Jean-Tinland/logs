@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AppContextProvider from "@/components/app-context";
+import PreferencesInitializer from "@/components/preferences-initializer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,9 +18,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="auto">
       <body>
-        <AppContextProvider>{children}</AppContextProvider>
+        <AppContextProvider>
+          <PreferencesInitializer />
+          {children}
+        </AppContextProvider>
       </body>
     </html>
   );

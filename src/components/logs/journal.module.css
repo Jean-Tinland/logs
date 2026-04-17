@@ -33,9 +33,20 @@
   );
 }
 
+:global(:root[data-theme="dark"]) .journal::before,
+:global(:root[data-theme="dark"]) .journal::after {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--ds-grey-200, #f8f8f8) 30%,
+    var(--ds-grey-200, #f8f8f8) 70%,
+    transparent 100%
+  );
+}
+
 @media (prefers-color-scheme: dark) {
-  .journal::before,
-  .journal::after {
+  :global(:root[data-theme="auto"]) .journal::before,
+  :global(:root[data-theme="auto"]) .journal::after {
     background: linear-gradient(
       to bottom,
       transparent 0%,

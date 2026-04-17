@@ -1,0 +1,37 @@
+.container {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.version {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.links {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: var(--ds-primary, var(--ds-blue-500, #002dcc));
+}
