@@ -1,5 +1,9 @@
 # Changelog
 
+## Fri, Apr 17 2026 (v1.0.2)
+
+- fix: adjust padding and position of log actions
+
 ## Fri, Apr 17 2026 (v1.0.1)
 
 - feat: clear selected journal entry on outside click and Escape

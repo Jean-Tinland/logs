@@ -79,7 +79,7 @@ button.loadMore {
   flex-direction: row;
   align-items: flex-start;
   gap: 8px;
-  padding: 2px 6px;
+  padding: 4px 6px;
   font-size: 14px;
   border-radius: var(--ds-radius-100, 4px);
   transition: background-color 160ms
@@ -146,8 +146,10 @@ button.loadMore {
 }
 
 .actions {
-  flex: 0 0 auto;
-  margin-left: auto;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 4px;

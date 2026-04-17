@@ -127,39 +127,6 @@ npm run update
     - `count`
     - `logs` (newest first)
 
-## Project Layout
-
-```text
-src/
-  app/
-    api/
-      login/route.ts
-      logs/
-        [id]/route.ts
-        export/route.ts
-        route.ts
-    globals.css
-    layout.tsx
-    login/page.tsx
-    page.tsx
-  components/
-    login-form.tsx
-    logs/
-      input-field.tsx
-      journal.tsx
-      logs.tsx
-  lib/
-    date.ts
-    file-logs-repository.ts
-    logs-repository.ts
-  services/
-    api.ts
-    auth.ts
-    cookies.ts
-  types/
-    log.ts
-```
-
 ## Notes
 
 - Node runtime is required for auth and filesystem-backed API routes.
