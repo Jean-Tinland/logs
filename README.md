@@ -1,6 +1,6 @@
 # Logs
 
-Standalone local-first logbook extracted from the Draft Pad logs feature.
+Standalone local-first logbook.
 
 The app is intentionally narrow: authenticate with a shared password, write short logs fast, review them by day, delete/copy entries, and export everything as JSON.
 
@@ -167,4 +167,4 @@ src/
 
 ## License
 
-Private project unless you decide otherwise.
+GPL-3.0 License. See [LICENSE](LICENSE) for details.

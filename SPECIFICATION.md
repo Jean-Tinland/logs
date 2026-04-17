@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-Provide a standalone, local-first logging application extracted from Draft Pad logs.
+Provide a standalone, local-first logging application.
 The app focuses on quick journaling with plain text, local persistence, and simple operations.
 
 ## 2. Product Goals
