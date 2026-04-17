@@ -1,5 +1,6 @@
 "use client";
 
+import Input from "jt-design-system/es/input";
 import Select from "jt-design-system/es/select";
 import { useAppContext } from "@/components/app-context";
 import * as PreferencesService from "@/services/preferences";
@@ -33,14 +34,19 @@ export default function Preferences() {
         options={THEME_OPTIONS}
         compact
       />
-      <Select
+      <Input
+        type="text"
         label="Font family"
         className={styles.field}
         value={fontFamily}
         onValueChange={updatePreference("fontFamily")}
-        options={[...PreferencesService.FONT_FAMILY_OPTIONS]}
+        placeholder='e.g. "Iosevka", monospace'
+        spellCheck={false}
         compact
       />
+      <div className={styles.helpText}>
+        Enter any CSS font-family value or stack.
+      </div>
     </div>
   );
 }
