@@ -109,8 +109,8 @@ export default function InputField({
       onFocusCapture={handleFocusCapture}
     >
       <div className={styles.helper}>
-        (n: normal, h: highlight, w: warn, d: danger) · submit: cmd/ctrl+enter ·
-        nav: cmd/ctrl+up/down
+        n: normal, h: highlight, w: warn, d: danger{" "}
+        <span>· submit: cmd/ctrl+enter · nav: cmd/ctrl+up/down</span>
       </div>
       <Textarea
         id="logs-input"

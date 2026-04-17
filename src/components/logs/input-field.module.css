@@ -14,6 +14,12 @@
   color: var(--ds-grey-500, #7c7b7b);
 }
 
+.helper span {
+  @media (hover: none) and (pointer: coarse) {
+    display: none;
+  }
+}
+
 .field {
   height: 100px;
 }

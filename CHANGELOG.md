@@ -1,5 +1,9 @@
 # Changelog
 
+## Fri, Apr 17 2026 (v1.1.1)
+
+- feat: enhance helper text visibility in input field
+
 ## Fri, Apr 17 2026 (v1.1.0)
 
 - feat: implement log search functionality and UI enhancements
