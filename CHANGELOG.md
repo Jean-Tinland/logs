@@ -1,5 +1,10 @@
 # Changelog
 
+## Fri, Apr 17 2026 (v1.0.3)
+
+- feat: update preferences component with input field and help text
+- feat: add export functionality to settings component
+
 ## Fri, Apr 17 2026 (v1.0.2)
 
 - fix: adjust padding and position of log actions

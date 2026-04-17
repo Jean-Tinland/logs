@@ -2,6 +2,7 @@ import Dialog from "jt-design-system/es/dialog";
 import Tabs from "jt-design-system/es/tabs";
 import Icon from "@/components/icon";
 import Preferences from "./preferences";
+import Export from "./export";
 import About from "./about";
 import styles from "./settings.module.css";
 
@@ -34,6 +35,16 @@ export default function Settings({ opened, close }: Props) {
                 ),
                 value: "preferences",
                 content: <Preferences />,
+              },
+              {
+                label: (
+                  <>
+                    <Icon code="download" className={styles.tabIcon} />
+                    Export
+                  </>
+                ),
+                value: "export",
+                content: <Export />,
               },
               {
                 label: (

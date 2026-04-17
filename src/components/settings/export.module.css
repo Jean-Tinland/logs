@@ -1,0 +1,28 @@
+.container {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.description {
+  max-width: 360px;
+  color: var(--text-secondary-color);
+  line-height: 1.5;
+}
+
+.button {
+  align-self: flex-start;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
