@@ -195,6 +195,16 @@
   }
 }
 
+::highlight(logs-search-match) {
+  background: color-mix(in srgb, var(--ds-yellow-200) 72%, transparent);
+  color: inherit;
+}
+
+::highlight(logs-search-active-match) {
+  background: color-mix(in srgb, var(--ds-blue-200) 78%, transparent);
+  color: inherit;
+}
+
 /* Reset */
 
 /*

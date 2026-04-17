@@ -6,7 +6,8 @@ import Button from "jt-design-system/es/button";
 import { useSnackbar } from "jt-design-system/es/snackbar";
 import Icon from "@/components/icon";
 import * as API from "@/services/api";
-import { buildDateWindow, shiftDateKey, toDateKey } from "@/lib/date";
+import { fromDateKey, shiftDateKey, toDateKey } from "@/lib/date";
+import { toPlainLogContent } from "@/lib/log-content";
 import { type LogItem } from "@/types/log";
 import styles from "./journal.module.css";
 
@@ -14,6 +15,7 @@ type Props = {
   groups: LogItem[][];
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  focusRequest: FocusRequest | null;
 };
 
 const WINDOW_DAYS = 5;
@@ -26,7 +28,16 @@ type EntryRef = {
   id: number;
 };
 
-export default function Journal({ groups, loading, setLoading }: Props) {
+type FocusRequest = EntryRef & {
+  nonce: number;
+};
+
+export default function Journal({
+  groups,
+  loading,
+  setLoading,
+  focusRequest,
+}: Props) {
   const snackbar = useSnackbar();
   const [recentGroups, setRecentGroups] = React.useState<LogItem[][]>(groups);
   const [oldGroups, setOldGroups] = React.useState<LogItem[][]>([]);
@@ -116,8 +127,8 @@ export default function Journal({ groups, loading, setLoading }: Props) {
     }
 
     const node = entryRefs.current.get(getEntryKey(selectedEntry));
-    node?.scrollIntoView({ block: "nearest" });
-  }, [selectedEntry]);
+    node?.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, [orderedEntries, selectedEntry]);
 
   const mutateGroups = React.useCallback(
     (entryRef: EntryRef, updater: (item: LogItem) => LogItem | null) => {
@@ -147,7 +158,7 @@ export default function Journal({ groups, loading, setLoading }: Props) {
       }
 
       try {
-        await navigator.clipboard.writeText(toPlainContent(entry.content));
+        await navigator.clipboard.writeText(toPlainLogContent(entry.content));
         snackbar.show({ type: "success", message: "Log copied" });
         return true;
       } catch {
@@ -296,10 +307,7 @@ export default function Journal({ groups, loading, setLoading }: Props) {
       const loadedDays =
         journal.length < WINDOW_DAYS ? WINDOW_DAYS : journal.length;
       const reference = shiftDateKey(toDateKey(new Date()), -loadedDays);
-      const previousDays = buildDateWindow(reference, WINDOW_DAYS);
-      const groups = await Promise.all(
-        previousDays.map((day) => API.getLogs(day)),
-      );
+      const groups = await API.getLogGroups(reference, WINDOW_DAYS);
 
       setOldGroups((current) => {
         return [...groups, ...current];
@@ -310,6 +318,43 @@ export default function Journal({ groups, loading, setLoading }: Props) {
       setLoading(false);
     }
   }, [journal, loading, setLoading]);
+
+  const focusEntry = React.useCallback(
+    async (entryRef: EntryRef) => {
+      if (!findLogByEntry(journal, entryRef)) {
+        const today = toDateKey(new Date());
+        const loadedDays = Math.max(1, journal.length);
+        const oldestLoadedDay = shiftDateKey(today, -(loadedDays - 1));
+
+        if (entryRef.day < oldestLoadedDay) {
+          setLoading(true);
+
+          try {
+            const missingDays = getDayDistance(oldestLoadedDay, entryRef.day);
+            const groups = await loadGroupedRange(
+              shiftDateKey(oldestLoadedDay, -1),
+              missingDays,
+            );
+
+            setOldGroups((current) => [...groups, ...current]);
+          } finally {
+            setLoading(false);
+          }
+        }
+      }
+
+      setSelectedEntry(entryRef);
+    },
+    [journal, setLoading],
+  );
+
+  React.useEffect(() => {
+    if (!focusRequest) {
+      return;
+    }
+
+    void focusEntry({ day: focusRequest.day, id: focusRequest.id });
+  }, [focusEntry, focusRequest]);
 
   return (
     <div className={styles.journal}>
@@ -382,7 +427,7 @@ export default function Journal({ groups, loading, setLoading }: Props) {
                   <div className={styles.logMain}>
                     <div className={styles.createdAt}>[{formattedDate}]</div>
                     <div className={styles.content}>
-                      {toPlainContent(content)}
+                      {toPlainLogContent(content)}
                     </div>
                   </div>
                   <div
@@ -500,6 +545,27 @@ function findLogByEntry(groups: LogItem[][], target: EntryRef) {
   return null;
 }
 
-function toPlainContent(content: string) {
-  return content.replace(/<br\s*\/?>/gi, "\n").replace(/\\n/g, "\n");
+async function loadGroupedRange(reference: string, days: number) {
+  const MAX_DAYS_PER_REQUEST = 30;
+  let remainingDays = days;
+  let batchReference = reference;
+  const loadedGroups: LogItem[][] = [];
+
+  while (remainingDays > 0) {
+    const batchDays = Math.min(MAX_DAYS_PER_REQUEST, remainingDays);
+    const groups = await API.getLogGroups(batchReference, batchDays);
+    loadedGroups.unshift(...groups);
+    batchReference = shiftDateKey(batchReference, -batchDays);
+    remainingDays -= batchDays;
+  }
+
+  return loadedGroups;
+}
+
+function getDayDistance(laterDate: string, earlierDate: string) {
+  const later = fromDateKey(laterDate).getTime();
+  const earlier = fromDateKey(earlierDate).getTime();
+  const difference = later - earlier;
+
+  return Math.max(0, Math.round(difference / (24 * 60 * 60 * 1000)));
 }

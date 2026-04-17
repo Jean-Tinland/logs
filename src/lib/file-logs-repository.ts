@@ -1,9 +1,21 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { toDateKey } from "@/lib/date";
+import { collapseWhitespace, toPlainLogContent } from "@/lib/log-content";
 import type { LogItem, LogKind } from "@/types/log";
 
 const LOGS_DIR = path.join(process.cwd(), "contents", "logs");
+
+export type SearchableLogEntry = LogItem & {
+  day: string;
+  plainContent: string;
+  searchText: string;
+};
+
+const searchIndexCache = new Map<
+  string,
+  { mtimeMs: number; entries: SearchableLogEntry[] }
+>();
 
 async function ensureLogsDir() {
   await fs.mkdir(LOGS_DIR, { recursive: true });
@@ -27,6 +39,7 @@ async function readLogsFile(date: string): Promise<LogItem[]> {
 async function writeLogsFile(date: string, logs: LogItem[]) {
   const filePath = getLogFilePath(date);
   await fs.writeFile(filePath, JSON.stringify(logs, null, 2), "utf-8");
+  searchIndexCache.delete(date);
 }
 
 export async function getLogsByDate(date: string): Promise<LogItem[]> {
@@ -86,4 +99,66 @@ export async function getAllLogsNewestFirst(): Promise<LogItem[]> {
   return logsByDay
     .flat()
     .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+}
+
+export async function getSearchableLogsNewestFirst(): Promise<
+  SearchableLogEntry[]
+> {
+  await ensureLogsDir();
+  const files = await fs.readdir(LOGS_DIR);
+  const dates = files
+    .filter((file) => file.endsWith(".json"))
+    .map((file) => file.replace(".json", ""));
+  const activeDates = new Set(dates);
+
+  for (const cachedDate of searchIndexCache.keys()) {
+    if (!activeDates.has(cachedDate)) {
+      searchIndexCache.delete(cachedDate);
+    }
+  }
+
+  const entriesByDay = await Promise.all(
+    dates.map((date) => getSearchableLogsByDate(date)),
+  );
+
+  return entriesByDay
+    .flat()
+    .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+}
+
+async function getSearchableLogsByDate(
+  date: string,
+): Promise<SearchableLogEntry[]> {
+  const filePath = getLogFilePath(date);
+
+  try {
+    const stats = await fs.stat(filePath);
+    const cached = searchIndexCache.get(date);
+
+    if (cached && cached.mtimeMs === stats.mtimeMs) {
+      return cached.entries;
+    }
+
+    const logs = await readLogsFile(date);
+    const entries = logs.map((log) => {
+      const plainContent = toPlainLogContent(log.content);
+
+      return {
+        ...log,
+        day: date,
+        plainContent,
+        searchText: collapseWhitespace(plainContent).toLocaleLowerCase(),
+      } satisfies SearchableLogEntry;
+    });
+
+    searchIndexCache.set(date, {
+      mtimeMs: stats.mtimeMs,
+      entries,
+    });
+
+    return entries;
+  } catch {
+    searchIndexCache.delete(date);
+    return [];
+  }
 }

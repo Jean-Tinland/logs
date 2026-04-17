@@ -1,5 +1,9 @@
 # Changelog
 
+## Fri, Apr 17 2026 (v1.1.0)
+
+- feat: implement log search functionality and UI enhancements
+
 ## Fri, Apr 17 2026 (v1.0.3)
 
 - feat: update preferences component with input field and help text
