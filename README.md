@@ -4,6 +4,12 @@ Standalone local-first logbook.
 
 The app is intentionally narrow: authenticate with a shared password, write short logs fast, review them by day, delete/copy entries, and export everything as JSON.
 
+[Changelog](./CHANGELOG.md)
+
+<p align="center">
+  <img src="./public/images/preview.jpg" width="600" />
+</p>
+
 ## Highlights
 
 - Next.js App Router app with no external database service.
