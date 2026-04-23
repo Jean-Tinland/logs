@@ -3,6 +3,7 @@
 ## Thu, Apr 23 2026 (v1.2.1)
 
 - feat: update default days to 10 in page and journal components
+- feat: add date formatting for empty journal groups and implement date retrieval functions
 
 ## Fri, Apr 17 2026 (v1.2.0)
 

@@ -22,6 +22,11 @@ const WINDOW_DAYS = 10;
 const INPUT_FOCUS_EVENT = "logs:input-focused";
 const LOG_INPUT_SELECTOR = 'textarea[data-log-input="true"]';
 const LOG_ENTRY_SELECTOR = '[data-log-entry="true"]';
+const EMPTY_GROUP_DATE_FORMATTER = new Intl.DateTimeFormat("en-GB", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+});
 
 type EntryRef = {
   day: string;
@@ -368,12 +373,14 @@ export default function Journal({
         Load 10 previous days
       </Button>
       {journal.map((group, i) => {
+        const groupDate = getJournalGroupDate(journal.length, i);
+
         if (!group.length) {
           return (
             <React.Fragment key={i}>
               <div className={styles.separator} />
               <div className={styles.empty}>
-                {"<"}Empty{">"}
+                {"<"}[{formatEmptyGroupDate(groupDate)}] Empty{">"}
               </div>
             </React.Fragment>
           );
@@ -569,4 +576,14 @@ function getDayDistance(laterDate: string, earlierDate: string) {
   const difference = later - earlier;
 
   return Math.max(0, Math.round(difference / (24 * 60 * 60 * 1000)));
+}
+
+function getJournalGroupDate(totalGroups: number, index: number) {
+  const today = toDateKey(new Date());
+  const daysFromOldest = totalGroups - 1 - index;
+  return shiftDateKey(today, -daysFromOldest);
+}
+
+function formatEmptyGroupDate(dateKey: string) {
+  return EMPTY_GROUP_DATE_FORMATTER.format(fromDateKey(dateKey));
 }
