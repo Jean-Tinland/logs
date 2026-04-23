@@ -18,7 +18,7 @@ type Props = {
   focusRequest: FocusRequest | null;
 };
 
-const WINDOW_DAYS = 5;
+const WINDOW_DAYS = 10;
 const INPUT_FOCUS_EVENT = "logs:input-focused";
 const LOG_INPUT_SELECTOR = 'textarea[data-log-input="true"]';
 const LOG_ENTRY_SELECTOR = '[data-log-entry="true"]';
@@ -365,10 +365,10 @@ export default function Journal({
         disabled={loading}
       >
         <Icon code="plus" />
-        Load 5 previous days
+        Load 10 previous days
       </Button>
       {journal.map((group, i) => {
-        if (!group.length)
+        if (!group.length) {
           return (
             <React.Fragment key={i}>
               <div className={styles.separator} />
@@ -377,6 +377,7 @@ export default function Journal({
               </div>
             </React.Fragment>
           );
+        }
 
         return (
           <React.Fragment key={i}>

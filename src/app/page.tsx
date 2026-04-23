@@ -3,7 +3,7 @@ import { getGroupedLogs } from "@/lib/logs-repository";
 import type { LogItem } from "@/types/log";
 import styles from "./page.module.css";
 
-const DEFAULT_DAYS = 5;
+const DEFAULT_DAYS = 10;
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
