@@ -54,7 +54,7 @@ The app focuses on quick journaling with plain text, local persistence, and simp
 ### FR-3 Read Logs
 
 - App displays logs grouped by day.
-- Initial page load requests the latest 5 day groups.
+- Initial page load requests the latest 10 day groups.
 - API supports dynamic window size through `days` query.
 - Empty days appear as `<Empty>` groups.
 
@@ -70,7 +70,7 @@ The app focuses on quick journaling with plain text, local persistence, and simp
 
 ### FR-6 Incremental History
 
-- User can load older data by 5-day windows.
+- User can load older data by 10-day windows.
 - Older groups are prepended to already loaded groups.
 
 ### FR-7 Export

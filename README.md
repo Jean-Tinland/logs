@@ -15,7 +15,7 @@ The app is intentionally narrow: authenticate with a shared password, write shor
 - Next.js App Router app with no external database service.
 - File-based storage in JSON files under `contents/logs`.
 - Day-grouped journal UI with a sticky composer.
-- Incremental history loading (`Load 5 previous days`).
+- Incremental history loading (`Load 10 previous days`).
 - Log kinds: `normal`, `highlight`, `warn`, `danger`.
 - Copy and delete actions for each entry.
 - Full JSON export endpoint.
